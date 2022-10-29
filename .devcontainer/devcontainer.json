@@ -42,7 +42,8 @@
 				"MS-CEINTL.vscode-language-pack-zh-hans",
 				"GitHub.copilot",
 				"ms-azuretools.vscode-docker",
-				"oderwat.indent-rainbow"
+				"oderwat.indent-rainbow",
+				"GitHub.copilot-labs"
 			]
 		}
 	},
