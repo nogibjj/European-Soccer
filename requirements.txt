@@ -4,3 +4,4 @@ pandas==1.5.1
 matplotlib==3.6.1
 matplotlib-inline==0.1.6
 mpl-chord-diagram==0.4.0
+pylint==2.15.5
