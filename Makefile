@@ -3,10 +3,10 @@ install:
 		pip install -r requirements.txt
 
 format:
-	find . -name '*.py' | xargs black
+	black *.py
 
 lint:
-	find . -name '*.py' | xargs pylint --output-format=colorized --disable=R,C,W1203,W1202,W1514
+	pylint --output-format=colorized --disable=R,C,W1203,W1202,W1514 *.py
 test:
 
 all: install format lint test
