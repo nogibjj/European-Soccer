@@ -46,4 +46,3 @@ if __name__ == "__main__":
         "--season", help="season to plot", type=str, default="2014/2015"
     )
     main(parser)
-    
