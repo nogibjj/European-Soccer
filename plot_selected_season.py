@@ -9,21 +9,20 @@ from libs.download_data import download
 from libs.utils import transfer_matrix, get_data, read_season
 
 
-def main(parser):
-    # if file does not exist, download it
-    path = "/workspaces/European-Soccer/Data/"
-    database = path + "database.sqlite"
-    if not os.path.exists(database):
-        download()
+def main(par):
+    database = "mids-367807.european_soccer"
 
-    #read in the season
-    season = read_season(parser)
+    # read in the season
+    season = read_season(par)
 
-    #get data from database
+    # get data from database
     seasons, Match, League = get_data(database, season)
 
-    #plot the chord diagram
+    # get the transfer matrix
     matrix, names = transfer_matrix(season, seasons, Match, League)
+
+    # plot the chord diagram
+    print("---------------Plotting chord diagram---------------")
     chord_diagram(
         matrix,
         names,
@@ -41,10 +40,13 @@ def main(parser):
     plt.savefig(f"chord_photo/{prefix}_chord_diagram.png")
     plt.show()
     plt.close()
+    print("Done")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--season", help="season to plot", type=str, default="2014/2015")
+    parser.add_argument(
+        "--season", help="season to plot", type=str, default="2014/2015"
+    )
     main(parser)
-    print("Done")
+    
