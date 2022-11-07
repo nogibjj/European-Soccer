@@ -1,5 +1,5 @@
 import pandas as pd
-import sqlite3
+from google.cloud import bigquery
 
 #create a table with all the players and the leagues they played in the given season
 def create_player_league_table(season, Match):
@@ -34,6 +34,7 @@ def compute_transfer(season, seasons, Match):
 
 #compute the transfer matrix, and the name for each column
 def transfer_matrix(season, seasons, Match, League):
+    print("-----------------Processing Data-----------------")
     transfer = compute_transfer(season, seasons, Match)
     
     #create a transfer matrix
@@ -43,19 +44,27 @@ def transfer_matrix(season, seasons, Match, League):
 
     league_name = League.set_index("id")["name"].to_dict()
     names = [league_name[i] for i in matrix.columns]
-
+    print("Data processed\n")
     return matrix.values.tolist(), names
 
 # get data from database
 def get_data(database, season = "2011/2012"):
     # connect to database
-    conn = sqlite3.connect(database)
-    seasons = pd.read_sql("""   SELECT DISTINCT season
-                                FROM Match;""", conn).values.flatten().tolist()
+    print("-----------------Connecting to database-----------------")
+    client = bigquery.Client()
+    print("Database connected\n")
 
+    
     # read data from database
-    Match = pd.read_sql(
-        f"""SELECT league_id, season,
+    print("-----------------Loading Data-----------------")
+    
+    # get all the seasons
+    query_season = f"""   SELECT DISTINCT season
+                                FROM {database}.Match;"""
+    seasons = client.query(query_season).to_dataframe().values.flatten().tolist()
+
+    # get all the matches
+    query_Match = f"""SELECT league_id, season,
                 home_player_1, home_player_2, home_player_3, home_player_4, home_player_5, home_player_6, home_player_7, home_player_8, 
                 home_player_9, home_player_10, home_player_11, home_player_X1, home_player_X2, home_player_X3, 
                 home_player_X4, home_player_X5, home_player_X6, home_player_X7, home_player_X8, home_player_X9, 
@@ -68,17 +77,15 @@ def get_data(database, season = "2011/2012"):
                 away_player_X10, away_player_X11, away_player_Y1, away_player_Y2, away_player_Y3, away_player_Y4,
                 away_player_Y5, away_player_Y6, away_player_Y7, away_player_Y8, away_player_Y9, away_player_Y10,
                 away_player_Y11
-            FROM Match
-            WHERE season IN {season, next_season(season, seasons)};""",
-        conn,
-    ).dropna()
-
-    League = pd.read_sql(
-        """ SELECT id, name
-            FROM League;""",
-        conn,
-    )
-    conn.close()
+            FROM {database}.Match
+            WHERE season IN {season, next_season(season, seasons)};"""
+    Match = client.query(query_Match).to_dataframe().dropna()
+    
+    # get all the leagues
+    query_League = f""" SELECT id, name
+            FROM {database}.League;"""
+    League = client.query(query_League).to_dataframe()
+    print("Data loaded\n")
     return seasons, Match, League
 
 #read season from command line
