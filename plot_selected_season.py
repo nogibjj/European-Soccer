@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 
 # Improts
-import os
 import argparse
 import matplotlib.pyplot as plt
 from mpl_chord_diagram import chord_diagram
-from libs.download_data import download
 from libs.utils import transfer_matrix, get_data, read_season
 
 
 def main(par):
-    database = "mids-367807.european_soccer"
-
     # read in the season
     season = read_season(par)
 
     # get data from database
+    database = "mids-367807.european_soccer"
     seasons, Match, League = get_data(database, season)
 
     # get the transfer matrix
