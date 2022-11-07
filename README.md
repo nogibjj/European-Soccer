@@ -8,7 +8,7 @@ This project utilizes GitHub CodeSpaces, Google Cloud Storage, and Google BigQue
 
 ## Flow Chart
 
-![project 3 flow chart](project 3 flow chart.png)
+![Diagram](image/Diagram.png)
 
 The above diagram shows the workflow of this project. 
 
