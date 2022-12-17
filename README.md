@@ -41,5 +41,6 @@ The above diagram shows the workflow of this project.
       - `python plot_transfer_chord.py`
       - All the plots will be stored in the `chord_photo` directory
 
-   
+## Sample Output
+![Diagram](chord_photo/2008_2009_chord_diagram.png)
 
